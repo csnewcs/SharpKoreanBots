@@ -12,11 +12,11 @@ namespace SharpKoreanBots
     public class KoreanBotsClient
     {
         const string baseUrl = "https://koreanbots.dev/api/v2/";
-        private readonly string _token;
+        // private readonly string _token;
 
-        public KoreanBotsClient(string Token)
+        public KoreanBotsClient()
         {
-            _token = Token;
+            // _token = Token;
         }
         public BotInfo GetBot(ulong BotID)
         {
