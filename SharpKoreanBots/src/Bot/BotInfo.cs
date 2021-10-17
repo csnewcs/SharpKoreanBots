@@ -125,6 +125,7 @@ namespace SharpKoreanBots.Bot
             _avatar = avatar;
         }
 
+        /// <summary>get bot info from bot id</summary>
         public static BotInfo Get(ulong BotID)
         {
             WebClient client = new WebClient();
@@ -157,7 +158,7 @@ namespace SharpKoreanBots.Bot
             // ====봇 정보====
             JObject bot = json;
             // System.IO.File.WriteAllText("getbot", bot.ToString());
-            BotInfo info = new BotInfo((ulong)bot["id"], bot["name"].ToString(), null, (int)bot["tag"], ownerInfos.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString());
+            BotInfo info = new BotInfo((ulong)bot["id"], null, bot["name"].ToString(), (int)bot["tag"], ownerInfos.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString());
             // info.Update()
             return info;
         }
