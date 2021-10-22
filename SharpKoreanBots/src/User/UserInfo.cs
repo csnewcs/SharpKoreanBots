@@ -27,24 +27,29 @@ namespace SharpKoreanBots.User
         {
             get => _tag;
         }
+        
         string _github;
         public string GitHub
         {
             get => _github;
         }
-        UserFlag _flag;
+        UserFlag[] _flags;
+        public UserFlag[] Flags
+        {
+            get => _flags;
+        }
         BotInfo[] _bots;
         public BotInfo[] Bots
         {
             get => _bots;
         }
-        public UserInfo(ulong id, string name = null, int tag = 0, string github = null, UserFlag flag = UserFlag.Normal, BotInfo[] bots = null)
+        public UserInfo(ulong id, string name = null, int tag = 0, string github = null, UserFlag[] flags = null, BotInfo[] bots = null)
         {
             _id = id;
             _name = name;
             _tag = tag;
             _github = github;
-            _flag = flag;
+            _flags = flags;
             _bots = bots;
         }
         public static UserInfo Get(ulong UserID)
@@ -80,6 +85,7 @@ namespace SharpKoreanBots.User
                 (string)data["username"],
                 (int)data["tag"],
                 data["github"]?.ToString(),
+                UserInfo.GetUserFlags((int)data["flags"]),
                 bots: bots.ToArray()
                 // (UserFlag)data["flag"],
                 // BotInfo.Get((ulong)data["id"])
@@ -89,11 +95,31 @@ namespace SharpKoreanBots.User
         {
             return $"{_name}#{_tag}";
         }
+        public static UserFlag[] GetUserFlags(int flagInt)
+        {
+            List<UserFlag> flags = new List<UserFlag>();
+            if((flagInt & 0b1) == 1)
+            {
+                flags.Add(UserFlag.Admin);
+            }
+            if((flagInt & 0b10) == 2)
+            {
+                flags.Add(UserFlag.BugHunter);
+            }
+            if((flagInt & 0b100) == 4)
+            {
+                flags.Add(UserFlag.Reviewer);
+            }
+            if((flagInt & 0b1000) == 8)
+            {
+                flags.Add(UserFlag.Premium);
+            }
+            return flags.ToArray();
+        }
 
     }
     public enum UserFlag
     {
-        Normal,
         Admin,
         BugHunter,
         Reviewer,

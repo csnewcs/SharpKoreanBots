@@ -263,17 +263,29 @@ namespace SharpKoreanBots.Bot
         public static BotFlag[] GetBotFlags(int flagInt)
         {
             var flags = new List<BotFlag>();
-            int last = 64;
-            BotFlag[] allFlags = new BotFlag[] {(BotFlag)5, (BotFlag)4, (BotFlag)3, (BotFlag)2, (BotFlag)1, (BotFlag)0};
-            for(int i = 0; i < allFlags.Length; i++)
+            if((flagInt & 64) == 64)
             {
-                if(last == 2) last = 1; // 1 << 1이 비어있음
-                if(flagInt >= last)
-                {
-                    flags.Add(allFlags[i]);
-                    flagInt -= last;
-                }
-                last /= 2;
+                flags.Add(BotFlag.FirstHackertonWinner);
+            }
+            if((flagInt & 32) == 32)
+            {
+                flags.Add(BotFlag.Premium);
+            }
+            if((flagInt & 16) == 16)
+            {
+                flags.Add(BotFlag.DiscordVerified);
+            }
+            if((flagInt & 8) == 8)
+            {
+                flags.Add(BotFlag.Partner);
+            }
+            if((flagInt & 4) == 4)
+            {
+                flags.Add(BotFlag.KoreanBotsVerified);
+            }
+            if((flagInt & 1) == 1) //0b10은 비어있음
+            {
+                flags.Add(BotFlag.Official);
             }
             return flags.ToArray();
         }

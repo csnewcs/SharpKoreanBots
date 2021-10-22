@@ -14,7 +14,12 @@ namespace _3._Get_User_Info
             {
                 bots += bot.ToString() + "\n";
             }
-            Console.WriteLine($"===============유저 정보===============\n이름#태그: {userInfo.Name}#{userInfo.Tag}\n깃헙: {userInfo.GitHub}\n봇들: {bots}");
+            string flags = "";
+            foreach(var flag in userInfo.Flags)
+            {
+                flags += flag.ToString() + ", ";
+            }
+            Console.WriteLine($"===============유저 정보===============\n이름#태그: {userInfo.Name}#{userInfo.Tag}\n깃헙: {userInfo.GitHub}\n플래그: {flags}\n봇들: {bots}");
         }
     }
 }
