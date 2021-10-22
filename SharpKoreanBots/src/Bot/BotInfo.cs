@@ -1,7 +1,9 @@
 using System;
 using System.Net;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using Newtonsoft.Json.Linq;
 
 namespace SharpKoreanBots.Bot
@@ -26,11 +28,11 @@ namespace SharpKoreanBots.Bot
             get {return _token;}
             set {_token = value;}
         }
-        // BotFlag? _flag;
-        // public BotFlag? Flag
-        // {
-        //     get {return _flag;}
-        // }
+        BotFlag[] _flags;
+        public BotFlag[] Flags
+        {
+            get {return _flags;}
+        }
         string _library;
         public string Library
         {
@@ -52,7 +54,7 @@ namespace SharpKoreanBots.Bot
             get {return _serverCount;}
             set {_serverCount = value;}
         }
-        public int _shardCount;
+        int _shardCount;
         public int ShardCount
         {
             get {return _shardCount;}
@@ -108,14 +110,14 @@ namespace SharpKoreanBots.Bot
         {
             get {return _categories;}
         }
-        public BotInfo(ulong id, string token = null, string name = null, int tag = 0, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState state = BotState.Null, BotCategory[] categories = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null)
+        public BotInfo(ulong id, string token = null, string name = null, int tag = 0, BotFlag[] flags = null, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState state = BotState.Null, BotCategory[] categories = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null)
         {
             _owner = owner;
             _id = id;
             _token = token;
             _name = name;
             _tag = tag;
-            // _flag = flag;
+            _flags = flags;
             _prefix = prefix;
             _votes = votes;
             _intro = intro;
@@ -169,7 +171,8 @@ namespace SharpKoreanBots.Bot
             {
                 categories.Add(BotInfo.GetBotCategory(category.ToString()));
             }
-            BotInfo info = new BotInfo((ulong)json["id"], null, json["name"].ToString(), (int)json["tag"], ownerInfos.ToArray(), json["prefix"]?.ToString(), (int)json["votes"], json["intro"]?.ToString(), json["desc"]?.ToString(), json["lib"]?.ToString(), BotInfo.GetBotState(json["state"]?.ToString()), categories.ToArray(), json["servers"].Type == JTokenType.Null ? 0 : (int)json["servers"], json["shards"].Type == JTokenType.Null ? 0 : (int)json["shards"], json["web"]?.ToString(), json["github"]?.ToString(), json["discord"]?.ToString(), json["avatar"]?.ToString());
+            
+            BotInfo info = new BotInfo((ulong)json["id"], null, json["name"].ToString(), (int)json["tag"],BotInfo.GetBotFlags((int)json["flags"]) , ownerInfos.ToArray(), json["prefix"]?.ToString(), (int)json["votes"], json["intro"]?.ToString(), json["desc"]?.ToString(), json["lib"]?.ToString(), BotInfo.GetBotState(json["state"]?.ToString()), categories.ToArray(), json["servers"].Type == JTokenType.Null ? 0 : (int)json["servers"], json["shards"].Type == JTokenType.Null ? 0 : (int)json["shards"], json["web"]?.ToString(), json["github"]?.ToString(), json["discord"]?.ToString(), json["avatar"]?.ToString());
             // info.Update()
             return info;
         }
@@ -257,6 +260,23 @@ namespace SharpKoreanBots.Bot
                     throw new System.Exception("Unkown category");
             }
         }
+        public static BotFlag[] GetBotFlags(int flagInt)
+        {
+            var flags = new List<BotFlag>();
+            int last = 64;
+            BotFlag[] allFlags = new BotFlag[] {(BotFlag)5, (BotFlag)4, (BotFlag)3, (BotFlag)2, (BotFlag)1, (BotFlag)0};
+            for(int i = 0; i < allFlags.Length; i++)
+            {
+                if(last == 2) last = 1; // 1 << 1이 비어있음
+                if(flagInt >= last)
+                {
+                    flags.Add(allFlags[i]);
+                    flagInt -= last;
+                }
+                last /= 2;
+            }
+            return flags.ToArray();
+        }
     }
     // public enum Category
     // {
@@ -307,16 +327,15 @@ namespace SharpKoreanBots.Bot
         Minecraft
     }
     
-    // public enum BotFlag
-    // {
-    //     Normal,
-    //     Official,
-    //     KoreanBotsVerified,
-    //     Partner,
-    //     DiscordVerified,
-    //     Premium,
-    //     FirstHackertonWinner
-    // }
+    public enum BotFlag
+    {
+        Official,
+        KoreanBotsVerified,
+        Partner,
+        DiscordVerified,
+        Premium,
+        FirstHackertonWinner
+    }
     public enum BotState
     {
         Ok,
