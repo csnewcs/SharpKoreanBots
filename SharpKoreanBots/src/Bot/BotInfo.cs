@@ -219,7 +219,37 @@ namespace SharpKoreanBots.Bot
             client.Headers.Add("Content-Type", "application/json");
             client.UploadString($"https://koreanbots.dev/api/v2/bots/{_id}/stats", "POST", update.ToString());
         }
-
+        public bool isVoted(ulong userId)
+        {
+            JObject json = getVoteJson(userId);
+            return (bool)json["voted"];
+        }
+        public bool isVoted(UserInfo user)
+        {
+            JObject json = getVoteJson(user.ID);
+            return (bool)json["voted"];
+        }
+        public bool isVoted(ulong userId, out DateTime time)
+        {
+            JObject json = getVoteJson(userId);
+            time = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds((double)json["lastVote"]); //timestamp = 0
+            return (bool)json["voted"];
+        }
+        public bool isVoted(UserInfo user, out DateTime time)
+        {
+            JObject json = getVoteJson(user.ID);
+            time = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds((double)json["lastVote"]); //timestamp = 0
+            return (bool)json["voted"];            
+        }
+        private JObject getVoteJson(ulong userId)
+        {
+            WebClient client = new WebClient();
+            string url = $"{baseUrl}bots/{_id}/vote?userID={userId}";
+            client.Headers.Add("Authorization", _token);
+            string download = client.DownloadString(url);
+            JObject json = JObject.Parse(download)["data"] as JObject;
+            return json;
+        }
         public override string ToString()
         {
             return $"{_name}#{_tag}";
