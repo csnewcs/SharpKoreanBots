@@ -77,7 +77,7 @@ namespace SharpKoreanBots.User
                 {
                     categories.Add(BotInfo.GetBotCategory(category.ToString()));
                 }
-                bots.Add(new BotInfo((ulong)bot["id"], null, bot["name"].ToString(), (int)bot["tag"], BotInfo.GetBotFlags((int)bot["flags"]), owners.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), categories.ToArray(), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString())); 
+                bots.Add(new BotInfo((ulong)bot["id"], null, bot["name"].ToString(), (int)bot["tag"], BotInfo.GetBotFlags((int)bot["flags"]), owners.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), BotInfo.GetBotStatus(bot["status"]?.ToString()), categories.ToArray(), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString(), bot["url"]?.ToString(), bot["vanity"]?.ToString(), bot["bg"]?.ToString(), bot["banner"]?.ToString())); 
             }
 
             return new UserInfo(

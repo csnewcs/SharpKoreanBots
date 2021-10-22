@@ -90,6 +90,11 @@ namespace SharpKoreanBots.Bot
         {
             get {return _state;}
         }
+        BotStatus _status;
+        public BotStatus Status
+        {
+            get {return _status;}
+        }
         string _name;
         public string Name
         {
@@ -110,7 +115,29 @@ namespace SharpKoreanBots.Bot
         {
             get {return _categories;}
         }
-        public BotInfo(ulong id, string token = null, string name = null, int tag = 0, BotFlag[] flags = null, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState state = BotState.Null, BotCategory[] categories = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null)
+        string _url;
+        public string URL
+        {
+            get {return _url;}
+        }
+        string _vanity;
+        public string Vanity
+        {
+            get {return _vanity;}
+        }
+        string _background;
+        public string Background
+        {
+            get {return _background;}
+        }
+        string _banner;
+        public string Banner
+        {
+            get {return _banner;}
+        }        
+        
+        
+        public BotInfo(ulong id, string token = null, string name = null, int tag = 0, BotFlag[] flags = null, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState state = BotState.Null, BotStatus status = BotStatus.Null , BotCategory[] categories = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null, string url = null, string vanity = null, string background = null, string banner = null)
         {
             _owner = owner;
             _id = id;
@@ -131,6 +158,11 @@ namespace SharpKoreanBots.Bot
             _github = github;
             _discord = discord;
             _avatar = avatar;
+            _status = status;
+            _url = url;
+            _vanity = vanity;
+            _background = background;
+            _banner = banner;
         }
 
         /// <summary>get bot info from bot id</summary>
@@ -172,7 +204,7 @@ namespace SharpKoreanBots.Bot
                 categories.Add(BotInfo.GetBotCategory(category.ToString()));
             }
             
-            BotInfo info = new BotInfo((ulong)json["id"], null, json["name"].ToString(), (int)json["tag"],BotInfo.GetBotFlags((int)json["flags"]) , ownerInfos.ToArray(), json["prefix"]?.ToString(), (int)json["votes"], json["intro"]?.ToString(), json["desc"]?.ToString(), json["lib"]?.ToString(), BotInfo.GetBotState(json["state"]?.ToString()), categories.ToArray(), json["servers"].Type == JTokenType.Null ? 0 : (int)json["servers"], json["shards"].Type == JTokenType.Null ? 0 : (int)json["shards"], json["web"]?.ToString(), json["github"]?.ToString(), json["discord"]?.ToString(), json["avatar"]?.ToString());
+            BotInfo info = new BotInfo((ulong)json["id"], null, json["name"].ToString(), (int)json["tag"],BotInfo.GetBotFlags((int)json["flags"]) , ownerInfos.ToArray(), json["prefix"]?.ToString(), (int)json["votes"], json["intro"]?.ToString(), json["desc"]?.ToString(), json["lib"]?.ToString(), BotInfo.GetBotState(json["state"]?.ToString()), BotInfo.GetBotStatus(json["status"]?.ToString()), categories.ToArray(), json["servers"].Type == JTokenType.Null ? 0 : (int)json["servers"], json["shards"].Type == JTokenType.Null ? 0 : (int)json["shards"], json["web"]?.ToString(), json["github"]?.ToString(), json["discord"]?.ToString(), json["avatar"]?.ToString(), json["url"]?.ToString(), json["vanity"]?.ToString(), json["bg"]?.ToString(), json["banner"]?.ToString());
             // info.Update()
             return info;
         }
@@ -206,8 +238,30 @@ namespace SharpKoreanBots.Bot
                     return BotState.Private;
                 case "archived":
                     return BotState.Archived;
+                case null:
+                    return BotState.Null;
                 default:
                     throw new System.Exception("Unkown state");
+            }
+        }
+        public static BotStatus GetBotStatus(string statusString)
+        {
+            switch (statusString)
+            {
+                case "online":
+                    return BotStatus.Online;
+                case "idle":
+                    return BotStatus.Idle;
+                case "dnd":
+                    return BotStatus.Dnd;
+                case "streaming":
+                    return BotStatus.Streaming;
+                case "offline":
+                    return BotStatus.Offline;
+                case null:
+                    return BotStatus.Null;
+                default:
+                    throw new System.Exception("Unkown status");
             }
         }
         public static BotCategory GetBotCategory(string categoryString)
@@ -363,6 +417,7 @@ namespace SharpKoreanBots.Bot
         Idle,
         Dnd,
         Streaming,
-        Offline
+        Offline,
+        Null
     }
 }
