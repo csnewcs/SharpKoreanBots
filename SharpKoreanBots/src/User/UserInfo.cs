@@ -67,7 +67,12 @@ namespace SharpKoreanBots.User
                 {
                     owners.Add(new UserInfo((ulong)owner));
                 }
-                bots.Add(new BotInfo((ulong)bot["id"], null, bot["name"].ToString(), (int)bot["tag"], owners.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString())); 
+                List<BotCategory> categories = new List<BotCategory>();
+                foreach(var category in bot["category"])
+                {
+                    categories.Add(BotInfo.GetBotCategory(category.ToString()));
+                }
+                bots.Add(new BotInfo((ulong)bot["id"], null, bot["name"].ToString(), (int)bot["tag"], owners.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), categories.ToArray(), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString())); 
             }
 
             return new UserInfo(

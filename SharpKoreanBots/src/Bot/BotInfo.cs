@@ -83,8 +83,8 @@ namespace SharpKoreanBots.Bot
         {
             get {return _discord;}
         }
-        BotState? _state;
-        public BotState? State
+        BotState _state;
+        public BotState State
         {
             get {return _state;}
         }
@@ -103,7 +103,12 @@ namespace SharpKoreanBots.Bot
         {
             get {return _avatar;}
         }
-        public BotInfo(ulong id, string token = null, string name = null, int tag = 0, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState? state = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null)
+        BotCategory[] _categories;
+        public BotCategory[] Categories
+        {
+            get {return _categories;}
+        }
+        public BotInfo(ulong id, string token = null, string name = null, int tag = 0, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState state = BotState.Null, BotCategory[] categories = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null)
         {
             _owner = owner;
             _id = id;
@@ -117,6 +122,7 @@ namespace SharpKoreanBots.Bot
             _description = description;
             _library = library;
             _state = state;
+            _categories = categories;
             _serverCount = serverCount;
             _shardCount = shardCount;
             _website = website;
@@ -156,9 +162,14 @@ namespace SharpKoreanBots.Bot
 
 
             // ====봇 정보====
-            JObject bot = json;
+            // JObject bot = json;
             // System.IO.File.WriteAllText("getbot", bot.ToString());
-            BotInfo info = new BotInfo((ulong)bot["id"], null, bot["name"].ToString(), (int)bot["tag"], ownerInfos.ToArray(), bot["prefix"]?.ToString(), (int)bot["votes"], bot["intro"]?.ToString(), bot["desc"]?.ToString(), bot["lib"]?.ToString(), BotInfo.GetBotState(bot["state"]?.ToString()), bot["servers"].Type == JTokenType.Null ? 0 : (int)bot["servers"], bot["shards"].Type == JTokenType.Null ? 0 : (int)bot["shards"], bot["web"]?.ToString(), bot["github"]?.ToString(), bot["discord"]?.ToString(), bot["avatar"]?.ToString());
+            List<BotCategory> categories = new List<BotCategory>();
+            foreach(var category in json["category"])
+            {
+                categories.Add(BotInfo.GetBotCategory(category.ToString()));
+            }
+            BotInfo info = new BotInfo((ulong)json["id"], null, json["name"].ToString(), (int)json["tag"], ownerInfos.ToArray(), json["prefix"]?.ToString(), (int)json["votes"], json["intro"]?.ToString(), json["desc"]?.ToString(), json["lib"]?.ToString(), BotInfo.GetBotState(json["state"]?.ToString()), categories.ToArray(), json["servers"].Type == JTokenType.Null ? 0 : (int)json["servers"], json["shards"].Type == JTokenType.Null ? 0 : (int)json["shards"], json["web"]?.ToString(), json["github"]?.ToString(), json["discord"]?.ToString(), json["avatar"]?.ToString());
             // info.Update()
             return info;
         }
@@ -196,7 +207,56 @@ namespace SharpKoreanBots.Bot
                     throw new System.Exception("Unkown state");
             }
         }
-
+        public static BotCategory GetBotCategory(string categoryString)
+        {
+            switch(categoryString)
+            {
+                case "관리":
+                    return BotCategory.Management;
+                case "뮤직":
+                    return BotCategory.Music;
+                case "전적":
+                    return BotCategory.Record;
+                case "게임":
+                    return BotCategory.Game;
+                case "도박":
+                    return BotCategory.Gambling;
+                case "로깅":
+                    return BotCategory.Logging;
+                case "빗금 명령어":
+                    return BotCategory.SlashCommand;
+                case "웹 대시보드":
+                    return BotCategory.WebDashboard;
+                case "밈":
+                    return BotCategory.MEME;
+                case "레벨링":
+                    return BotCategory.Leveling;
+                case "유틸리티":
+                    return BotCategory.Utility;
+                case "대화":
+                    return BotCategory.Chat;
+                case "NSFW":
+                    return BotCategory.NSFW;
+                case "검색":
+                    return BotCategory.Search;
+                case "학교":
+                    return BotCategory.School;
+                case "코로나19":
+                    return BotCategory.Covid19;
+                case "번역":
+                    return BotCategory.Translation;
+                case "오버워치":
+                    return BotCategory.Overwatch;
+                case "리그 오브 레전드":
+                    return BotCategory.LeagueOfLegends;
+                case "배틀그라운드":
+                    return BotCategory.BattleGround;
+                case "마인크래프트":
+                    return BotCategory.Minecraft;                
+                default:
+                    throw new System.Exception("Unkown category");
+            }
+        }
     }
     // public enum Category
     // {
@@ -226,15 +286,15 @@ namespace SharpKoreanBots.Bot
     {
         Management,
         Music,
-        Stats,
-        Games,
+        Record,
+        Game,
         Gambling,
         Logging,
         SlashCommand,
         WebDashboard,
         MEME,
         Leveling,
-        Utilities,
+        Utility,
         Chat,
         NSFW,
         Search,
@@ -263,7 +323,8 @@ namespace SharpKoreanBots.Bot
         Reported,
         Blocked,
         Private,
-        Archived
+        Archived,
+        Null
     }
     public enum BotStatus
     {
