@@ -6,6 +6,11 @@
 한국 디스코드 리스트의 API 버전은 2입니다.
 
 ---
+## 설치
+```
+dotnet add package SharpKoreanBots --version 1.0.1
+```
+---
 ## 사용법
 ### 1. 봇 정보 가져오기
 ```cs
