@@ -34,9 +34,9 @@ Console.WriteLine(info) //출력: 이름#태그
 using SharpKoreanBots.Bot;
 using SharpKoreanBots.User;
 
-BotInfo info = new BotInfo(봇ID, "TOKEN"); //BotInfo.Get하고 Token 설정해도 됨
-UserInfo info = UserInfo.Get(유저ID);
-Console.WriteLine(info.isVoted(info)); //info 대신 유저ID 넣을 수도 있음
+BotInfo bInfo = new BotInfo(봇ID, "TOKEN"); //BotInfo.Get하고 Token 설정해도 됨
+UserInfo uInfo = UserInfo.Get(유저ID);
+Console.WriteLine(info.isVoted(uInfo)); //info 대신 유저ID 넣을 수도 있음
 //출력: True 혹은 False
 ```
 
