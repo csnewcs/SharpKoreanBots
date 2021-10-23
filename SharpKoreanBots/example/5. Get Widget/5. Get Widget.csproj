@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpKoreanBots" Version="0.0.22" />
+    <PackageReference Include="SharpKoreanBots" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
