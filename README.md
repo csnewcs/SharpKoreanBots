@@ -8,7 +8,7 @@
 ---
 ## 설치
 ```
-dotnet add package SharpKoreanBots --version 1.0.1
+dotnet add package SharpKoreanBot
 ```
 ---
 ## 사용법
