@@ -43,7 +43,7 @@ using SharpKoreanBots.User;
 
 BotInfo bInfo = new BotInfo(봇ID, "TOKEN"); //BotInfo.Get하고 Token 설정해도 됨
 UserInfo uInfo = UserInfo.Get(유저ID);
-Console.WriteLine(info.isVoted(uInfo)); //info 대신 유저ID 넣을 수도 있음
+Console.WriteLine(binfo.isVoted(uInfo)); //uInfo 대신 유저ID 넣을 수도 있음
 //출력: True 혹은 False
 ```
 ### 5. 위젯 가져오기
