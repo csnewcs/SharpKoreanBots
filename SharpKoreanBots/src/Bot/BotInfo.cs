@@ -12,157 +12,58 @@ namespace SharpKoreanBots.Bot
     public struct BotInfo
     {
         const string baseUrl = "https://koreanbots.dev/api/v2/";
-        UserInfo[] _owner;
-        public UserInfo[] Owner
-        {
-            get { return _owner; }
-        }
-        ulong _id;
-        public ulong ID
-        {
-            get {return _id;}
-        }
-        string _token;
-        public string Token
-        {
-            get {return _token;}
-            set {_token = value;}
-        }
-        BotFlag[] _flags;
-        public BotFlag[] Flags
-        {
-            get {return _flags;}
-        }
-        string _library;
-        public string Library
-        {
-            get {return _library;}
-        }
-        string _prefix;
-        public string Prefix
-        {
-            get {return _prefix;}
-        }
-        int _votes;
-        public int Votes
-        {
-            get {return _votes;}
-        }
-        int _serverCount;
-        public int ServerCount
-        {
-            get {return _serverCount;}
-            set {_serverCount = value;}
-        }
-        int _shardCount;
-        public int ShardCount
-        {
-            get {return _shardCount;}
-            set {_shardCount = value;}
-        }
-        string _intro;
-        public string Intro
-        {
-            get {return _intro;}
-        }
-        string _description;
-        public string Description
-        {
-            get {return _description;}
-        }
-        string _website;
-        public string Website
-        {
-            get {return _website;}
-        }
-        string _github;
-        public string Github
-        {
-            get {return _github;}
-        }
-        string _discord;
-        public string Discord
-        {
-            get {return _discord;}
-        }
-        BotState _state;
-        public BotState State
-        {
-            get {return _state;}
-        }
-        BotStatus _status;
-        public BotStatus Status
-        {
-            get {return _status;}
-        }
-        string _name;
-        public string Name
-        {
-            get {return _name;}
-        }
-        int _tag;
-        public int Tag
-        {
-            get {return _tag;}
-        }
-        string _avatar;
-        public string Avatar
-        {
-            get {return _avatar;}
-        }
-        BotCategory[] _categories;
-        public BotCategory[] Categories
-        {
-            get {return _categories;}
-        }
-        string _url;
-        public string URL
-        {
-            get {return _url;}
-        }
-        string _vanity;
-        public string Vanity
-        {
-            get {return _vanity;}
-        }
-        string _background;
-        public string Background
-        {
-            get {return _background;}
-        }
-        string _banner;
-        public string Banner
-        {
-            get {return _banner;}
-        }        
+        public UserInfo[] Owner {get;}
+        public ulong ID {get;}
+        public string Token{get;set;}
+        public BotFlag[] Flags {get;}
+        public string Library {get;}
+        public string Prefix {get;}
+        public int Votes {get;}
+        public int ServerCount {get;}
+        public int ShardCount {get; set;}
+        public string Intro {get;}
+        public string Description {get;}
+        public string Website {get;}
+        public string Github {get;}
+        public string Discord {get;}
+        public BotState State {get;}
+        public BotStatus Status {get;}
+        public string Name {get;}
+        public int Tag {get;}
+        public string Avatar {get;}
+        public BotCategory[] Categories {get;}
+        public string URL {get;}
+        public string Vanity {get;}
+        public string Background {get;}
+        public string Banner {get;}
         
         
         public BotInfo(ulong id, string token = null, string name = null, int tag = 0, BotFlag[] flags = null, UserInfo[] owner = null, string prefix = null, int votes = 0, string intro = null, string description = null, string library = null, BotState state = BotState.Null, BotStatus status = BotStatus.Null , BotCategory[] categories = null, int serverCount = 0, int shardCount = 1, string website = null, string github = null, string discord = null, string avatar = null, string url = null, string vanity = null, string background = null, string banner = null)
         {
-            _owner = owner;
-            _id = id;
-            _token = token;
-            _name = name;
-            _tag = tag;
-            _flags = flags;
-            _prefix = prefix;
-            _votes = votes;
-            _intro = intro;
-            _description = description;
-            _library = library;
-            _state = state;
-            _categories = categories;
-            _serverCount = serverCount;
-            _shardCount = shardCount;
-            _website = website;
-            _github = github;
-            _discord = discord;
-            _avatar = avatar;
-            _status = status;
-            _url = url;
-            _vanity = vanity;
-            _background = background;
-            _banner = banner;
+            Owner = owner;
+            ID = id;
+            Token = token;
+            Name = name;
+            Tag = tag;
+            Flags = flags;
+            Prefix = prefix;
+            Votes = votes;
+            Intro = intro;
+            Description = description;
+            Library = library;
+            State = state;
+            Categories = categories;
+            ServerCount = serverCount;
+            ShardCount = shardCount;
+            Website = website;
+            Github = github;
+            Discord = discord;
+            Avatar = avatar;
+            Status = status;
+            URL = url;
+            Vanity = vanity;
+            Background = background;
+            Banner = banner;
         }
 
         /// <summary>get bot info from bot id</summary>
@@ -212,12 +113,12 @@ namespace SharpKoreanBots.Bot
         public void Update() 
         {
             JObject update = new JObject();
-            update.Add("servers", _serverCount);
-            update.Add("shards", _shardCount);
+            update.Add("servers", ServerCount);
+            update.Add("shards", ShardCount);
             WebClient client = new WebClient();
-            client.Headers.Add("Authorization", _token);
+            client.Headers.Add("Authorization", Token);
             client.Headers.Add("Content-Type", "application/json");
-            client.UploadString($"https://koreanbots.dev/api/v2/bots/{_id}/stats", "POST", update.ToString());
+            client.UploadString($"https://koreanbots.dev/api/v2/bots/{ID}/stats", "POST", update.ToString());
         }
         public bool isVoted(ulong userId)
         {
@@ -244,15 +145,15 @@ namespace SharpKoreanBots.Bot
         private JObject getVoteJson(ulong userId)
         {
             WebClient client = new WebClient();
-            string url = $"{baseUrl}bots/{_id}/vote?userID={userId}";
-            client.Headers.Add("Authorization", _token);
+            string url = $"{baseUrl}bots/{ID}/vote?userID={userId}";
+            client.Headers.Add("Authorization", Token);
             string download = client.DownloadString(url);
             JObject json = JObject.Parse(download)["data"] as JObject;
             return json;
         }
         public override string ToString()
         {
-            return $"{_name}#{_tag}";
+            return $"{Name}#{Tag}";
         }
         public static BotState GetBotState(string stateString)
         {
